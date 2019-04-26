@@ -11,12 +11,22 @@ export const fetchQuestions = () => async (dispatch) => {
   }
 }
 
-export const createQuestion = text => async (dispatch) => {
+export const createQuestion = (text, tag) => async (dispatch) => {
   try {
-    const { data } = await axios.post('/questions', { text })
+    const { data } = await axios.post('/questions', { text, tag })
     dispatch({ type: actionTypes.QUESTIONS_CREATE, payload: data })
     dispatch(push('/'))
   } catch (err) {
     console.log(err)
   }
 }
+
+export const fetchSpecificQuestions = (tag) => async (dispatch) => {
+  try {
+    const {data} = await axios.get(`/questions/specific?tag=${tag}`)
+    //console.log(`data:${data}`);
+    dispatch({ type: actionTypes.QUESTIONS_FETCH_SPECIFIC, payload: data.reverse() });
+  } catch (err) {
+    console.log(err);
+  }
+};

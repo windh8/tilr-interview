@@ -1,38 +1,74 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+
 import { connect } from 'react-redux'
-import { fetchQuestions } from '../../actions/questions'
+import { fetchQuestions, fetchSpecificQuestions } from '../../actions/questions'
+
+import QuestionCard from './QuestionCard';
 
 class QuestionList extends Component {
+  state={ Questions: this.props.questions, tags: this.props.tags };
+
   componentDidMount() {
-    this.props.fetchQuestions()
+    this.props.fetchQuestions().then(() => {
+      this.setState({ tags: this.props.tags
+    });
+  })
+}
+
+  onSelectChange = (event) => {
+    this.setState({ Questions: this.props.questions});
+    if(event.target.value === 'All')
+    {
+      this.props.fetchQuestions();
+    }
+    else {
+      this.props.fetchSpecificQuestions(event.target.value);
+    }
+  }
+
+  onSelectRender = () => {
+    let tags_found = [];
+
+    this.state.tags.forEach((tag) => {
+      if(tags_found.indexOf(tag) === -1) {
+        tags_found.push(tag)
+      }
+    })
+
+    return tags_found.map( (tag, index ) => {
+        return<option key={index + 1} name={tag}>{tag}</option>;
+    })
   }
 
   render() {
     return (
       <div className='question-list'>
         <h3>Recently Added</h3>
-        {this.props.questions.map(question => (
-          <div className='card' key={question.question_id}>
-            <div className='card-body'>
-              <h5 className='card-title'>{question.text}</h5>
-              <div className='card-body'>
-                <button className='btn btn-success' style={{ marginRight: 10 }}>Yes</button>
-                <button className='btn btn-danger'>No</button>
-              </div>
-            </div>
-          </div>
-        ))}
+        <form onSubmit={(event) => event.preventDefault() }>
+          <a className='btn btn-primary' href='/'>Refresh</a>
+          <select name="tag-select" className="btn btn-primary"
+                  onClick={(event) => this.onSelectChange(event)}>
+            <option key='0' name='All'>All</option>
+            { this.onSelectRender() }
+          </select>
+          {this.props.questions.map(question => (
+            <QuestionCard question={question} key={question.question_id}/>
+          ))}
+          <input type='submit' className='btn btn-success' value='submit' />
+        </form>
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ questions }) => ({
-  questions: questions.all
+const mapStateToProps = ({ questions, tags }) => ({
+  questions: questions.all,
+  tags: questions.all.map(({tag}) => tag)
 })
 
 const mapDispatchToProps = {
-  fetchQuestions
+  fetchQuestions,
+  fetchSpecificQuestions
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionList)
