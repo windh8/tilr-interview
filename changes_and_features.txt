@@ -1,0 +1,16 @@
+changes:
+	+ Added a skip button to each question card in QuestionList
+		- No functionality added yet
+
+	+ Application now shows question tags underneath each question
+		+ Database modified for single tag per Question
+		+ Action Creator createQuestion modified
+		+ Modified Routes in api folder
+		+ Modified QuestionCard component to show tags
+		+ Add a refresh button with refresh functionality
+		+ Add a drop down list to show questions of choosen tag on Recently added page
+
+
+
+	+ Application can now show/filter questions for user based on tags
+		+ Tag List in Selector element will always show all tags of all questions loaded into app state
