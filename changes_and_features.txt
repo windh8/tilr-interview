@@ -21,3 +21,6 @@ changes:
 	+ Backend API can handle user login
 		+ search for user in users table
 		+ return an object with info as a response
+
+	+ Backend API has register route implemented
+		- need to encrypt with bycryt
