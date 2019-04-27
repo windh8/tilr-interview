@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchQuestions, fetchSpecificQuestions } from '../../actions/questions'
 
 import QuestionCard from './QuestionCard';
+import NavBar from './NavBar';
 
 class QuestionList extends Component {
   state={ Questions: this.props.questions, tags: this.props.tags };
@@ -42,20 +43,23 @@ class QuestionList extends Component {
 
   render() {
     return (
-      <div className='question-list'>
-        <h3>Recently Added</h3>
-        <form onSubmit={(event) => event.preventDefault() }>
-          <a className='btn btn-primary' href='/'>Refresh</a>
-          <select name="tag-select" className="btn btn-primary"
-                  onClick={(event) => this.onSelectChange(event)}>
-            <option key='0' name='All'>All</option>
-            { this.onSelectRender() }
-          </select>
-          {this.props.questions.map(question => (
-            <QuestionCard question={question} key={question.question_id}/>
-          ))}
-          <input type='submit' className='btn btn-success' value='submit' />
-        </form>
+      <div>
+        <NavBar />
+        <div className='question-list'>
+          <h3>Recently Added</h3>
+          <form onSubmit={(event) => event.preventDefault() }>
+            <a className='btn btn-primary' href='/home'>Refresh</a>
+            <select name="tag-select" className="btn btn-primary"
+                    onClick={(event) => this.onSelectChange(event)}>
+              <option key='0' name='All'>All</option>
+              { this.onSelectRender() }
+            </select>
+            {this.props.questions.map(question => (
+              <QuestionCard question={question} key={question.question_id}/>
+            ))}
+            <input type='submit' className='btn btn-success' value='submit' />
+          </form>
+        </div>
       </div>
     )
   }

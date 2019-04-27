@@ -14,3 +14,10 @@ changes:
 
 	+ Application can now show/filter questions for user based on tags
 		+ Tag List in Selector element will always show all tags of all questions loaded into app state
+
+	+ Backend API can handle registering new user
+		+ insert new user info into users table
+
+	+ Backend API can handle user login
+		+ search for user in users table
+		+ return an object with info as a response
