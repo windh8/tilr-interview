@@ -6,11 +6,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.ERROR:
+      return { error: action.payload.error }
     case actionTypes.AUTHENTICATE:
-      //console.log(action)
-      return { token: action.payload }
+      return { error: '' }
     case actionTypes.LOGOUT:
-      return {}
+      return { error: '' }
     default:
       return state
   }

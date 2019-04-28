@@ -3,15 +3,15 @@ import actionTypes from '../actions/actionTypes'
 const initialState = {
   all: {}
 }
-
+/*
 export default (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.AUTHENTICATE:
-      //console.log(action)
-      return { token: action.payload }
+    case actionTypes.ANSWERS_FETCH:
+      return { ...state, all: action.payload }
     case actionTypes.LOGOUT:
-      return {}
+      return { all: '' }
     default:
       return state
   }
 }
+*/

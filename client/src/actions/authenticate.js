@@ -5,14 +5,19 @@ import actionTypes from './actionTypes'
 export const authenticateUser = (name, password) => async (dispatch) => {
   try {
     const { data } = await axios.post('/login', {name, password})
-    dispatch({
-      type: actionTypes.AUTHENTICATE,
-      payload: data.jwt
-    });
-
-    //if data returns a jwt, then push directly to /home
     if(data.success) {
-      dispatch(push('/home'))
+      dispatch({
+        type: actionTypes.AUTHENTICATE,
+        payload: data.jwt
+      });
+      //dispatch another action to clear error state of app
+      dispatch(push('/home'));
+    }
+    else {
+      dispatch({
+        type: actionTypes.ERROR,
+        payload: data
+      });
     }
   } catch(err) {
     console.log(err)

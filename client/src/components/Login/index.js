@@ -5,17 +5,27 @@ import { NavLink } from 'react-router-dom';
 import {authenticateUser} from '../../actions/authenticate';
 
 class Login extends Component {
-  state = { user: '', pass: ''};
+  state = { user: '', pass: '', error: ''};
 
   onFormSubmit = (event) => {
     event.preventDefault();
-    this.props.authenticateUser(this.state.user, this.state.pass)
+    if(this.state.user && this.state.pass) {
+      this.props.authenticateUser(this.state.user, this.state.pass).then(() => {
+        if(this.state.error !== this.props.error.error) {
+          this.setState({error: this.props.error.error})
+        }
+      });
+    }
+    else {
+      this.setState({error: 'Login Requires Both Username and Password!'});
+    }
   }
 
   render() {
     return(
       <div>
         <h3>tilr-interview Login Page</h3>
+        <h5 className='text-danger'>{ !this.state.err ? `${this.state.error}` : '' }</h5>
         <form className='' onSubmit={(event) => this.onFormSubmit(event)}>
           <div className='form-group'>
             <input className='form-control' type='text' placeholder='Username'
@@ -37,8 +47,9 @@ const mapDispatchToProps = {
   authenticateUser
 }
 
-const mapStateToProps = ({ jwt }) => ({
-  jwt
+const mapStateToProps = ({ jwt, error }) => ({
+  jwt,
+  error
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

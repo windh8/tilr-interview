@@ -21,6 +21,15 @@ router.post('/questions', auth, async function(req, res) {
   }
 });
 
+router.post('/answers', auth, async function(req, res) {
+  try {
+    const answers = await knex.select().table('answers')
+    res.json(questions)
+  } catch (err) {
+    res.status(500)
+  }
+});
+
 // For adding more questions
 router.post('/questions/new', auth, async (req, res) => {
   const { text, tag } = req.body

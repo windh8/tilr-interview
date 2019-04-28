@@ -35,3 +35,7 @@ Filter Questions Feature:
 	[X] Setup Front End to Show Filtering Of Questions Functionality
 		[X] Modified QuestionList JSX
 		[X] Created Action Creator & Reducer for Filtering Questions Capabilities
+
+
+Login Form Validation Feature:
+	[X] Validates Username & Password field if the Username/Password is incorrect, or if no Values entered for Fields
