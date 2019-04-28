@@ -1,5 +1,7 @@
+const dotenv = require('dotenv').config();
 const express = require('express')
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const knex = require('knex')(require('./knexfile'))
 
@@ -83,8 +85,16 @@ router.get('/login', async (req, res) => {
 
     //check if passwords match
     if(correct_password) {
+      //Generate JWT Token (expires in an hour)
+      const payload = {
+        exp: Math.floor(Date.now() / 1000) + (60 * 60)
+      };
+      const token = await jwt.sign(payload, process.env.SECRET_KEY);
+      //res.json(token);
+
       //console.log(`Did user enter in correct password? ${correct_password}`);
       res.json(user);
+
     }
     else {
       //console.log(`Did user enter in correct password? ${correct_password}`);
@@ -99,20 +109,22 @@ router.get('/login', async (req, res) => {
 //For registering users
 router.post('/register', async (req, res) => {
   const { name, password } = req.body;
+  console.log(`${name} ${password}`)
+  //test to see what we get when we get a token
+  //if(req.body.token) {
+  //    console.log(`I got passed a token from client: ${req.body.token}`);
+  //}
+
   try {
     const user = await user_exists(name);
     if(!user.success){
       //If user found in DB then hash password
       const hash = await bcrypt.hash(password, saltRounds);
-
-      const users = await knex('users').insert({ name, password: hash }, '*');
-      //console.log(`user: ${name} does not exist in Users Table, adding to table now`)
-      res.json({ data: users, created_user: true })
+      //Insert user into Users Table
+      const user_add = await knex('users').insert({ name, password: hash }, '*');
     }
-    else {
-      //console.log(`user: ${name} already exists in Users Table`)
-      res.json({ created_user: false })
-    }
+    // Will return true, to client, if user has been added to Users Table, false otherwise
+    res.json({ created_user: !user.success })
   } catch {
     res.status(500)
   }

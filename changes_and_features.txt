@@ -20,6 +20,10 @@ Added Functionality:
 		+ Hashes passwords (using bcrypt package)
 		+ Insert new user info (including hashed password as password) into Users table
 
+	+ Front End SPA has page to register new users
+		+ Fully functioning
+		+ On submittal, Backend API handles request, creates the new user, client gets sent to login page
+
 	+ Backend API can handle user login
 		+ search for user in users table
 		+ hash (using bcrypt) given password from request and compare to hashed password of username from Users Table,

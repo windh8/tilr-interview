@@ -13,9 +13,10 @@ class Login extends Component {
           <div className='form-group'>
             <input className='form-control' type='password' placeholder='Password' />
           </div>
-          <input className='btn btn-primary' type='submit' onClick={(event) => event.preventDefault() } />
+          <input className='btn btn-primary' type='submit' value='login' onClick={(event) => event.preventDefault() } />
+          <NavLink to='/register' className='btn btn-primary' exact>Register</NavLink>
         </form>
-        <NavLink to='/home' className='nav-link btn btn-primary' exact>Home(Test)</NavLink>
+        <NavLink to='/home' className='nav-link ' exact>Go to Home(Test)</NavLink>
       </div>
     );
   }
