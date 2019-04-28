@@ -39,6 +39,32 @@ router.get('/questions/specific', async (req, res) => {
   }
 });
 
+/* user_exists(...): helper function to determine if given
+ *                  username is already used in Users Table (username already
+ *                  taken by another registered user)*/
+const user_exists = async (name) => {
+  try {
+    //const user = await knex.select().table('users').where({name, password});
+    const user = await knex.select().table('users').where({name});
+    if(user.length === 0) {
+      return {
+        success: false
+      };
+    }
+    else {
+      return {
+        data: user[0],
+        success: true
+      };
+    }
+  } catch(err) {
+    return {
+      success: false,
+      message: 'error returned'
+    };
+  }
+}
+
 //For Logining in users.
 //This will check if user exists within users table in DB, if it does it will return
 //a response object { success, hash, { username, password } } indicating that it found user
@@ -50,24 +76,20 @@ router.get('/questions/specific', async (req, res) => {
 router.get('/login', async (req, res) => {
   const { name, password } = req.body;
   try {
-    let response = {
-      success: 'failed'
+
+    const user = await user_exists(name);
+
+    const correct_password = await bcrypt.compare(password, user.data.password);
+
+    //check if passwords match
+    if(correct_password) {
+      //console.log(`Did user enter in correct password? ${correct_password}`);
+      res.json(user);
     }
-
-    const users = await knex.select().table('users')
-
-    const user_exits = users.some((user) => {
-      return user.name === name && user.password === password;
-      });
-
-    if(user_exits) {
-      response.success = 'success',
-
-      //example password hash to be changed later
-      response.hash= 'ab23f5b123sddgged',
-      response.user = { username: name, password: password }
+    else {
+      //console.log(`Did user enter in correct password? ${correct_password}`);
+      res.json({ success: false });
     }
-    res.json(response);
   }
   catch (err) {
     res.status(500)
@@ -75,46 +97,25 @@ router.get('/login', async (req, res) => {
 })
 
 //For registering users
-//issue: how TF do i do this
 router.post('/register', async (req, res) => {
   const { name, password } = req.body;
-  let users;
   try {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      bcrypt.hash(password, salt, (err, hash) => {
-        if(err) {
-          console.log(err)
-          users = err;
-        }
-        else {
-          console.log(hash);
-          users = knex('users').insert({ name, password: hash }, '*')
-          console.log(users);
-        }
-      })
-    }).then(() => res.json(users));
+    const user = await user_exists(name);
+    if(!user.success){
+      //If user found in DB then hash password
+      const hash = await bcrypt.hash(password, saltRounds);
 
-    //const users = await knex('users').insert({ name, password }, '*')
-    // res.json(users)
+      const users = await knex('users').insert({ name, password: hash }, '*');
+      //console.log(`user: ${name} does not exist in Users Table, adding to table now`)
+      res.json({ data: users, created_user: true })
+    }
+    else {
+      //console.log(`user: ${name} already exists in Users Table`)
+      res.json({ created_user: false })
+    }
   } catch {
     res.status(500)
   }
 })
-/*const createUser = async (req) => {
-  bcrypt.genSalt(saltRounds, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => {
-      if(err) {
-        console.log(err)
-        users = err;
-      }
-      else {
-        console.log(hash);
-        users = knex('users').insert({ name, password: hash }, '*')
-        console.log(users);
-      }
-    })
-  })
-}*/
-
 
 module.exports = router
