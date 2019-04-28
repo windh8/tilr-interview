@@ -1,26 +1,26 @@
-changes:
-	+ Added a skip button to each question card in QuestionList
+Added Functionality:
+	- Skip questions
+		+ Added a skip button to each question card in QuestionList
 		- No functionality added yet
 
-	+ Application now shows question tags underneath each question
+	+ Each Question has a tag associated with it (Application now shows question tags underneath each question)
 		+ Database modified for single tag per Question
 		+ Action Creator createQuestion modified
-		+ Modified Routes in api folder
+		+ Modified Routes /questions & Created Route /question/specific in api folder
 		+ Modified QuestionCard component to show tags
-		+ Add a refresh button with refresh functionality
-		+ Add a drop down list to show questions of choosen tag on Recently added page
+		+ Added a refresh button with refresh functionality
+		+ Added a drop down list to show questions of choosen tag on Recently added page
 
-
-
-	+ Application can now show/filter questions for user based on tags
-		+ Tag List in Selector element will always show all tags of all questions loaded into app state
+	+ Filter Shown Questions (Application can now show/filter questions for user based on a tag selected in the select element)
+		+ Tag List in Selector element will always show all tags of all questions loaded into app state (requested from backend db)
 
 	+ Backend API can handle registering new user
-		+ insert new user info into users table
+		+ Checks if username is already used, if not used proceeds to next step (hashing/storing/send-json-indicating-success)
+		  otherwise return json indicating failiure to register
+		+ Hashes passwords (using bcrypt package)
+		+ Insert new user info (including hashed password as password) into Users table
 
 	+ Backend API can handle user login
 		+ search for user in users table
-		+ return an object with info as a response
-
-	+ Backend API has register route implemented
-		- need to encrypt with bycryt
+		+ hash (using bcrypt) given password from request and compare to hashed password of username from Users Table,
+		  if match then return json indicating success, otherwise return json indicating failiure
