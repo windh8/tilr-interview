@@ -7,7 +7,9 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTHENTICATE:
-      return { all: action.payload }
+      return { token: action.payload }
+    case actionTypes.LOGOUT:
+      return { token: '' }
     default:
       return state
   }

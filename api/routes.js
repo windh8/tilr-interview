@@ -5,22 +5,24 @@ const jwt = require('jsonwebtoken');
 
 const knex = require('knex')(require('./knexfile'))
 
+const auth = require('./middleware/authorization')
+
 const router = express.Router()
 
 const saltRounds = 10;
 
 //For getting all questions
-router.get('/questions', async (req, res) => {
+router.post('/questions', auth, async function(req, res) {
   try {
     const questions = await knex.select().table('questions')
     res.json(questions)
   } catch (err) {
     res.status(500)
   }
-})
+});
 
 //For adding more questions
-router.post('/questions', async (req, res) => {
+router.post('/questions/new', auth, async (req, res) => {
   const { text, tag } = req.body
   try {
     const question = await knex('questions').insert({ text, tag }, '*')
@@ -31,7 +33,7 @@ router.post('/questions', async (req, res) => {
 })
 
 //For querying specific questions based on tags
-router.get('/questions/specific', async (req, res) => {
+router.post('/questions/specific', auth, async (req, res) => {
   const { tag } = req.query;
   try {
     const questions = await knex('questions').where('tag', tag).table('questions')
@@ -75,30 +77,25 @@ const user_exists = async (name) => {
 //To Do:  - incorporate hashing/salting
 //        - give response object correct hash value of user
 //        - more ...
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { name, password } = req.body;
+  console.log(`name:${name}, pass:${password}`)
   try {
-
     const user = await user_exists(name);
-
+    if(!user.success) {
+      res.json( { success: user.success, error: 'Incorrect Username Entered!' } )
+    }
     const correct_password = await bcrypt.compare(password, user.data.password);
 
-    //check if passwords match
     if(correct_password) {
-      //Generate JWT Token (expires in an hour)
       const payload = {
         exp: Math.floor(Date.now() / 1000) + (60 * 60)
       };
       const token = await jwt.sign(payload, process.env.SECRET_KEY);
-      //res.json(token);
-
-      //console.log(`Did user enter in correct password? ${correct_password}`);
-      res.json(user);
-
+      res.json( {success: user.success,jwt: token });
     }
     else {
-      //console.log(`Did user enter in correct password? ${correct_password}`);
-      res.json({ success: false });
+      res.json({ success: !user.success, error: 'Incorrect Password Entered!' });
     }
   }
   catch (err) {
@@ -109,11 +106,6 @@ router.get('/login', async (req, res) => {
 //For registering users
 router.post('/register', async (req, res) => {
   const { name, password } = req.body;
-  console.log(`${name} ${password}`)
-  //test to see what we get when we get a token
-  //if(req.body.token) {
-  //    console.log(`I got passed a token from client: ${req.body.token}`);
-  //}
 
   try {
     const user = await user_exists(name);

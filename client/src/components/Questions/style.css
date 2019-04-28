@@ -17,6 +17,6 @@
   grid-template-columns: 1fr;
   margin-top: 20px; }
 
-form input[type|="submit"] {
+form input[type|=submit] {
   margin-right: 5px;
 }

@@ -2,18 +2,20 @@ import { push } from 'connected-react-router'
 import axios from '../services/axios'
 import actionTypes from './actionTypes'
 
-export const fetchQuestions = () => async (dispatch) => {
+export const fetchQuestions = (jwt) => async (dispatch) => {
   try {
-    const { data } = await axios.get('/questions')
+    const {token} = jwt;
+    const { data } = await axios.post('/questions', {token})
     dispatch({ type: actionTypes.QUESTIONS_FETCH_ALL, payload: data.reverse() })
   } catch (err) {
     console.log(err)
   }
 }
 
-export const createQuestion = (text, tag) => async (dispatch) => {
+export const createQuestion = (text, tag, jwt) => async (dispatch) => {
   try {
-    const { data } = await axios.post('/questions', { text, tag })
+    const {token} = jwt;
+    const { data } = await axios.post('/questions/new', { text, tag, token })
     dispatch({ type: actionTypes.QUESTIONS_CREATE, payload: data })
     dispatch(push('/home'))
   } catch (err) {
@@ -21,10 +23,10 @@ export const createQuestion = (text, tag) => async (dispatch) => {
   }
 }
 
-export const fetchSpecificQuestions = (tag) => async (dispatch) => {
+export const fetchSpecificQuestions = (tag, jwt) => async (dispatch) => {
   try {
-    const {data} = await axios.get(`/questions/specific?tag=${tag}`)
-    //console.log(`data:${data}`);
+    const {token} = jwt;
+    const {data} = await axios.post(`/questions/specific?tag=${tag}`, {token})
     dispatch({ type: actionTypes.QUESTIONS_FETCH_SPECIFIC, payload: data.reverse() });
   } catch (err) {
     console.log(err);

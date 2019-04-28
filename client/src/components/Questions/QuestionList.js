@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux'
+
 import { fetchQuestions, fetchSpecificQuestions } from '../../actions/questions'
+import { sendToLoginPage } from '../../actions/authenticate';
 
 import QuestionCard from './QuestionCard';
 import NavBar from './NavBar';
@@ -10,20 +11,27 @@ class QuestionList extends Component {
   state={ Questions: this.props.questions, tags: this.props.tags };
 
   componentDidMount() {
-    this.props.fetchQuestions().then(() => {
-      this.setState({ tags: this.props.tags
-    });
-  })
-}
+    /*console.log('[Component QuestionList] Does App State still have Token?')
+    console.log(this.props.jwt)*/
+    if(!this.props.jwt.token) {
+      //if no token in app state push user back to login page
+      this.props.sendToLoginPage();
+    }
+    else {
+      this.props.fetchQuestions(this.props.jwt).then(() => {
+        this.setState({ tags: this.props.tags });
+      })
+    }
+  }
 
   onSelectChange = (event) => {
     this.setState({ Questions: this.props.questions});
     if(event.target.value === 'All')
     {
-      this.props.fetchQuestions();
+      this.props.fetchQuestions(this.props.jwt);
     }
     else {
-      this.props.fetchSpecificQuestions(event.target.value);
+      this.props.fetchSpecificQuestions(event.target.value, this.props.jwt);
     }
   }
 
@@ -48,7 +56,6 @@ class QuestionList extends Component {
         <div className='question-list'>
           <h3>Recently Added</h3>
           <form onSubmit={(event) => event.preventDefault() }>
-            <a className='btn btn-primary' href='/home'>Refresh</a>
             <select name="tag-select" className="btn btn-primary"
                     onClick={(event) => this.onSelectChange(event)}>
               <option key='0' name='All'>All</option>
@@ -65,14 +72,16 @@ class QuestionList extends Component {
   }
 }
 
-const mapStateToProps = ({ questions, tags }) => ({
+const mapStateToProps = ({ questions, tags, jwt }) => ({
   questions: questions.all,
-  tags: questions.all.map(({tag}) => tag)
+  tags: questions.all.map(({tag}) => tag),
+  jwt
 })
 
 const mapDispatchToProps = {
   fetchQuestions,
-  fetchSpecificQuestions
+  fetchSpecificQuestions,
+  sendToLoginPage
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionList)

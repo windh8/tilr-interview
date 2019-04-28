@@ -10,6 +10,8 @@ export default (state = initialState, action) => {
       return { ...state, all: action.payload }
     case actionTypes.QUESTIONS_FETCH_SPECIFIC:
       return {all: action.payload};
+    case actionTypes.LOGOUT:
+      return { all: '' }
     default:
       return state
   }

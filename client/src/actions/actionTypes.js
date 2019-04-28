@@ -5,5 +5,6 @@ export default createTypes(
   'QUESTIONS_FETCH_ALL',
   'QUESTIONS_FETCH_SPECIFIC',
   'AUTHENTICATE',
-  'REGISTER'
+  'REGISTER',
+  'LOGOUT'
 )

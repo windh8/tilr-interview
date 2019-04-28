@@ -1,18 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { createQuestion } from '../../actions/questions'
 
 import NavBar from './NavBar';
+
+import { createQuestion } from '../../actions/questions'
+import { sendToLoginPage } from '../../actions/authenticate';
 
 class QuestionsForm extends Component {
   constructor() {
     super()
     this.state = { question: '', tag: '' }
   }
+  componentDidMount() {
+    if(!this.props.jwt.token) {
+      //if no token in app state push user back to login page
+      this.props.sendToLoginPage();
+    }
+  }
 
   submitForm(event) {
     event.preventDefault()
-    this.props.createQuestion(this.state.question, this.state.tag)
+    this.props.createQuestion(this.state.question, this.state.tag, this.props.jwt)
   }
 
   render() {
@@ -49,7 +57,12 @@ class QuestionsForm extends Component {
 }
 
 const mapDispatchToProps = {
-  createQuestion
+  createQuestion,
+  sendToLoginPage
 }
 
-export default connect(null, mapDispatchToProps)(QuestionsForm)
+const mapStateToProps = ({ jwt }) => ({
+  jwt
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionsForm)
