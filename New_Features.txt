@@ -1,0 +1,37 @@
+Register Feature:
+	[X] Setup API backend to handle registration route
+		[X] Search for given username in Users Table (uses user_exists() function)
+			-If username is not used:
+				[X] Hash given password
+				[X] Insert new user information (username, hashed password) into Users Table
+				[X] Return JSON object { "created_user": true } upon success
+			-If username is used
+				[X] Return JSON object { "created_user": false } indicating username is already taken
+	[X] Setup Front-End SPA to handle user registration
+		[X] Create a Register component
+		[X] Create an Action Type for registration
+		[X] Create an Action Creator that will send the data to the Backend API (/register route) to store new user info in Users Table
+		    and push the client's current route back to '/' (login page)
+		[X] Connect the Action Creator to the Register Component
+		[X] Create an onClick handler for form submital that will call the action creator
+
+
+Login Feature:
+	[X] Implement Authentication Middleware to allow use of Backend API routes (/questions /questions/Specific /quenstions/New) only for valid
+	    users (Users that have a JsonWebToken)
+	[X] Setup API Backend to handle login route
+		[X] Search for user record in Users Table based on username given
+		[X] Compare the password from the req(request) to the hashed password stored in the returned user's record (From the Users Table)
+		[X] Send response back to client, whether or not the user information was created on Backend Table
+	[X] Setup Front-End to handle login Functionality
+		[X] Created Login Component
+		[X] Created Action Creator & Reducer for Login Capabilities
+
+
+Filter Questions Feature:
+	[X] Setup API backend to handle Filtering Questions route
+		[X] Modified Backend Questions Table Schema to include information regarding Tags for Questions
+		[X] Add Route on API BackEnd to query for Questions based on specified Tag
+	[X] Setup Front End to Show Filtering Of Questions Functionality
+		[X] Modified QuestionList JSX
+		[X] Created Action Creator & Reducer for Filtering Questions Capabilities

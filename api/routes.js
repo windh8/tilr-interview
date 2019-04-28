@@ -11,7 +11,7 @@ const router = express.Router()
 
 const saltRounds = 10;
 
-//For getting all questions
+// For getting all questions
 router.post('/questions', auth, async function(req, res) {
   try {
     const questions = await knex.select().table('questions')
@@ -21,7 +21,7 @@ router.post('/questions', auth, async function(req, res) {
   }
 });
 
-//For adding more questions
+// For adding more questions
 router.post('/questions/new', auth, async (req, res) => {
   const { text, tag } = req.body
   try {
@@ -32,7 +32,7 @@ router.post('/questions/new', auth, async (req, res) => {
   }
 })
 
-//For querying specific questions based on tags
+// For querying specific questions based on tags
 router.post('/questions/specific', auth, async (req, res) => {
   const { tag } = req.query;
   try {
@@ -43,12 +43,9 @@ router.post('/questions/specific', auth, async (req, res) => {
   }
 });
 
-/* user_exists(...): helper function to determine if given
- *                  username is already used in Users Table (username already
- *                  taken by another registered user)*/
+// Determines if the specified username exists within the Users Table
 const user_exists = async (name) => {
   try {
-    //const user = await knex.select().table('users').where({name, password});
     const user = await knex.select().table('users').where({name});
     if(user.length === 0) {
       return {
@@ -69,17 +66,9 @@ const user_exists = async (name) => {
   }
 }
 
-//For Logining in users.
-//This will check if user exists within users table in DB, if it does it will return
-//a response object { success, hash, { username, password } } indicating that it found user
-//in users table, the password hash of user (to indicate successful log in, currently set to default junk hash)
-//and some other default info.
-//To Do:  - incorporate hashing/salting
-//        - give response object correct hash value of user
-//        - more ...
+// For Logining in users.
 router.post('/login', async (req, res) => {
   const { name, password } = req.body;
-  console.log(`name:${name}, pass:${password}`)
   try {
     const user = await user_exists(name);
     if(!user.success) {
@@ -103,19 +92,16 @@ router.post('/login', async (req, res) => {
   }
 })
 
-//For registering users
+// For registering users
 router.post('/register', async (req, res) => {
   const { name, password } = req.body;
-
   try {
     const user = await user_exists(name);
+    console.log(user)
     if(!user.success){
-      //If user found in DB then hash password
       const hash = await bcrypt.hash(password, saltRounds);
-      //Insert user into Users Table
       const user_add = await knex('users').insert({ name, password: hash }, '*');
     }
-    // Will return true, to client, if user has been added to Users Table, false otherwise
     res.json({ created_user: !user.success })
   } catch {
     res.status(500)
