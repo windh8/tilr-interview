@@ -8,13 +8,10 @@ import QuestionCard from './QuestionCard';
 import NavBar from './NavBar';
 
 class QuestionList extends Component {
-  state={ Questions: this.props.questions, tags: this.props.tags };
+  state={ Questions: this.props.questions, tags: this.props.tags, answers: [] };
 
   componentDidMount() {
-    /*console.log('[Component QuestionList] Does App State still have Token?')
-    console.log(this.props.jwt)*/
     if(!this.props.jwt.token) {
-      //if no token in app state push user back to login page
       this.props.sendToLoginPage();
     }
     else {
@@ -22,6 +19,20 @@ class QuestionList extends Component {
         this.setState({ tags: this.props.tags });
       })
     }
+  }
+
+  componentDidUpdate() {
+    console.log(this.state)
+  }
+
+  Answer= (text, ans) => {
+    let answers = this.state.answers;
+    answers.push({text, ans})
+    this.setState({ answers: answers})
+  }
+
+  onQuestionListSubmit = (event) => {
+    event.preventDefault();
   }
 
   onSelectChange = (event) => {
@@ -55,14 +66,14 @@ class QuestionList extends Component {
         <NavBar />
         <div className='question-list'>
           <h3>Recently Added</h3>
-          <form onSubmit={(event) => event.preventDefault() }>
-            <select name="tag-select" className="btn btn-primary"
+          <form onSubmit={(event) => this.onQuestionListSubmit(event) }>
+            <select name="tag-select" className="btn btn-primary form-selector"
                     onClick={(event) => this.onSelectChange(event)}>
               <option key='0' name='All'>All</option>
               { this.onSelectRender() }
             </select>
             {this.props.questions.map(question => (
-              <QuestionCard question={question} key={question.question_id}/>
+              <QuestionCard question={question} Answer={this.Answer} key={question.question_id}/>
             ))}
             <input type='submit' className='btn btn-success' value='submit' />
           </form>
@@ -74,7 +85,9 @@ class QuestionList extends Component {
 
 const mapStateToProps = ({ questions, tags, jwt }) => ({
   questions: questions.all,
-  tags: questions.all.map(({tag}) => tag),
+  tags: questions.all.map(({tag}) => {
+          return tag;
+        }),
   jwt
 })
 
