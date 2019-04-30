@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config();
+//const dotenv = require('dotenv').config();
 const express = require('express')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -10,6 +10,7 @@ const auth = require('./middleware/authorization')
 const router = express.Router()
 
 const saltRounds = 10;
+const SECRET_KEY = 'ARTICPHEONIX9';
 
 // For getting all questions
 router.post('/questions', auth, async function(req, res) {
@@ -58,7 +59,8 @@ const user_exists = async (name) => {
     const user = await knex.select().table('users').where({name});
     if(user.length === 0) {
       return {
-        success: false
+        success: false,
+        error: `User ${name} does not exist!`
       };
     }
     else {
@@ -70,7 +72,7 @@ const user_exists = async (name) => {
   } catch(err) {
     return {
       success: false,
-      message: 'error returned'
+      error: `An error has occured!\nError: ${err}\nPlease ensure that the DataBase is up and running!`
     };
   }
 }
@@ -81,7 +83,7 @@ router.post('/login', async (req, res) => {
   try {
     const user = await user_exists(name);
     if(!user.success) {
-      res.json( { success: user.success, error: 'Incorrect Username Entered!' } )
+      res.json( { success: false, error: user.error } )
     }
     const correct_password = await bcrypt.compare(password, user.data.password);
 
@@ -89,11 +91,12 @@ router.post('/login', async (req, res) => {
       const payload = {
         exp: Math.floor(Date.now() / 1000) + (60 * 60)
       };
-      const token = await jwt.sign(payload, process.env.SECRET_KEY);
-      res.json( {success: user.success,jwt: token });
+      
+      let token = await jwt.sign(payload, SECRET_KEY);
+      res.json( {success: true, jwt: token });
     }
     else {
-      res.json({ success: !user.success, error: 'Incorrect Password Entered!' });
+      res.json({ success: false, error: 'Incorrect Password Entered!' });
     }
   }
   catch (err) {

@@ -10,7 +10,6 @@ export const authenticateUser = (name, password) => async (dispatch) => {
         type: actionTypes.AUTHENTICATE,
         payload: data.jwt
       });
-      //dispatch another action to clear error state of app
       dispatch(push('/home'));
     }
     else {

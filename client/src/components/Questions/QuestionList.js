@@ -72,9 +72,9 @@ class QuestionList extends Component {
               <option key='0' name='All'>All</option>
               { this.onSelectRender() }
             </select>
-            {this.props.questions.map(question => (
+            {console.log(this.props.tags)/*this.props.questions.map(question => (
               <QuestionCard question={question} Answer={this.Answer} key={question.question_id}/>
-            ))}
+            ))*/}
             <input type='submit' className='btn btn-success' value='submit' />
           </form>
         </div>

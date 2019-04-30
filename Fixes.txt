@@ -1,0 +1,11 @@
+[Logging In: 04/29/2019 @ 11:56 PM]
+Traced out Authentication:
+  - In Component Login
+  - In Action Creator authenticateUser
+  - In Back End API Route /Login
+  - In Reducer jwt
+  - Ensured that correct values and logic were returned.
+
+
+Next to Fix:
+[Viewing Question List]

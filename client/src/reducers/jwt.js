@@ -7,7 +7,6 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTHENTICATE:
-      //console.log(action)
       return { token: action.payload }
     case actionTypes.LOGOUT:
       return {}
