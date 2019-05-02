@@ -46,16 +46,8 @@ class QuestionList extends Component {
     }
   }
 
-  onSelectRender = () => {
-    let tags_found = [];
-
-    this.state.tags.forEach((tag) => {
-      if(tags_found.indexOf(tag) === -1) {
-        tags_found.push(tag)
-      }
-    })
-
-    return tags_found.map( (tag, index ) => {
+  onSelectRender = (list) => {
+    return list.map( (tag, index ) => {
         return<option key={index + 1} name={tag}>{tag}</option>;
     })
   }
@@ -70,7 +62,7 @@ class QuestionList extends Component {
             <select name="tag-select" className="btn btn-primary form-selector"
                     onClick={(event) => this.onSelectChange(event)}>
               <option key='0' name='All'>All</option>
-              { this.onSelectRender() }
+              { this.onSelectRender(this.props.tags) }
             </select>
             {console.log(this.props.tags)/*this.props.questions.map(question => (
               <QuestionCard question={question} Answer={this.Answer} key={question.question_id}/>
@@ -85,9 +77,9 @@ class QuestionList extends Component {
 
 const mapStateToProps = ({ questions, tags, jwt }) => ({
   questions: questions.all,
-  tags: questions.all.map(({tag}) => {
+  tags: tags.all/*: questions.all.map(({tag}) => {
           return tag;
-        }),
+        })*/,
   jwt
 })
 
