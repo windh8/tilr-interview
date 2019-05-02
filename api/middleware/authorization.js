@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
-const app = express();
+//const app = express();
 
 // Validates whether or not incoming request to route is from actual verified
 // user (JsonWebToken)
 const auth = (req, res, next) => {
   const token = req.body.token;
+  console.log(token);
   if(!token) {
     res.json({ error: 'Unauthorized Access: Client Not Logged In!'});
   }
@@ -15,6 +16,7 @@ const auth = (req, res, next) => {
       if(err) {
         res.json({ error: 'Unauthorized Access: Invalid Token!'});
       }
+      console.log(decoded);
       req.user = decoded.user;
       next();
     })

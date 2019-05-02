@@ -1,4 +1,4 @@
-//const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config();
 const express = require('express')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -10,7 +10,6 @@ const auth = require('./middleware/authorization')
 const router = express.Router()
 
 const saltRounds = 10;
-const SECRET_KEY = 'ARTICPHEONIX9';
 
 // For getting all questions
 router.post('/questions', auth, async function(req, res) {
@@ -86,13 +85,12 @@ router.post('/login', async (req, res) => {
       res.json( { success: false, error: user.error } )
     }
     const correct_password = await bcrypt.compare(password, user.data.password);
-
     if(correct_password) {
       const payload = {
         exp: Math.floor(Date.now() / 1000) + (60 * 60)
       };
-      
-      let token = await jwt.sign(payload, SECRET_KEY);
+
+      let token = await jwt.sign(payload, process.env.SECRET_KEY);
       res.json( {success: true, jwt: token });
     }
     else {
