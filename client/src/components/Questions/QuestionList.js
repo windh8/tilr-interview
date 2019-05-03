@@ -8,7 +8,6 @@ import QuestionCard from './QuestionCard';
 import NavBar from './NavBar';
 
 class QuestionList extends Component {
-  //state={ questions: this.props.questions.all, tags: this.props.tags, answers: [] };
   state={ questions: [], tags: [], answers: [] };
 
   componentDidMount() {
@@ -33,13 +32,16 @@ class QuestionList extends Component {
   }
 
   onSelectChange = (event) => {
-    this.setState({ Questions: this.props.questions});
     if(event.target.value === 'All')
     {
-      this.props.fetchQuestions(this.props.jwt);
+      this.props.fetchQuestions(this.props.jwt).then(() => {
+        this.setState({ questions: this.props.questions});
+      });
     }
     else {
-      this.props.fetchSpecificQuestions(event.target.value, this.props.jwt);
+      this.props.fetchSpecificQuestions(event.target.value, this.props.jwt).then(() => {
+        this.setState({ questions: this.props.questions});
+      });
     }
   }
 

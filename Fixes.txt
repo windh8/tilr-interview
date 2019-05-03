@@ -14,8 +14,11 @@ Traced out Question/Tag Lists:
   - In Reducer questions
   - Ensured that correct values and logic were returned
     to QuestionList state ({ questions, tags})
-To Do:
-  - Fix Tag Filtering Feature
+
+[View Question List and Tag List: 05/03/2019 @ 4:00 PM]
+Debugged Question Filtering On Tags:
+  - Debugging of question filtering (based on tags) now finished
+  - Question Filtering now works
 
 Next to Fix:
-[Tag Filtering Feature]
+[Turn some routes into GET Routes]
