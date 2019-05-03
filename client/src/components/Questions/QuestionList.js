@@ -8,7 +8,8 @@ import QuestionCard from './QuestionCard';
 import NavBar from './NavBar';
 
 class QuestionList extends Component {
-  state={ Questions: this.props.questions, tags: this.props.tags, answers: [] };
+  //state={ questions: this.props.questions.all, tags: this.props.tags, answers: [] };
+  state={ questions: [], tags: [], answers: [] };
 
   componentDidMount() {
     if(!this.props.jwt.token) {
@@ -16,20 +17,16 @@ class QuestionList extends Component {
     }
     else {
       this.props.fetchQuestions(this.props.jwt).then(() => {
-        this.setState({ tags: this.props.tags });
+        this.setState({ tags: this.props.tags, questions: this.props.questions });
       })
     }
   }
 
-  componentDidUpdate() {
-    console.log(this.state)
-  }
-
-  Answer= (text, ans) => {
+  /*onAnswerSubmit = (text, ans) => {
     let answers = this.state.answers;
     answers.push({text, ans})
     this.setState({ answers: answers})
-  }
+  }*/
 
   onQuestionListSubmit = (event) => {
     event.preventDefault();
@@ -64,9 +61,12 @@ class QuestionList extends Component {
               <option key='0' name='All'>All</option>
               { this.onSelectRender(this.props.tags) }
             </select>
-            {console.log(this.props.tags)/*this.props.questions.map(question => (
-              <QuestionCard question={question} Answer={this.Answer} key={question.question_id}/>
-            ))*/}
+            {
+              this.state.questions.map( (question) => {
+                return <QuestionCard question={question} key={question.question_id}/>
+              })
+
+            }
             <input type='submit' className='btn btn-success' value='submit' />
           </form>
         </div>
@@ -77,9 +77,7 @@ class QuestionList extends Component {
 
 const mapStateToProps = ({ questions, tags, jwt }) => ({
   questions: questions.all,
-  tags: tags.all/*: questions.all.map(({tag}) => {
-          return tag;
-        })*/,
+  tags: tags.all,
   jwt
 })
 

@@ -6,6 +6,16 @@ Traced out Authentication:
   - In Reducer jwt
   - Ensured that correct values and logic were returned.
 
+[View Question List and Tag List: 05/02/2019 @ 9:11 PM]
+Traced out Question/Tag Lists:
+  - In Component QuestionList
+  - In Action Creator fetchQuestions
+  - In Back End API Route /questions
+  - In Reducer questions
+  - Ensured that correct values and logic were returned
+    to QuestionList state ({ questions, tags})
+To Do:
+  - Fix Tag Filtering Feature
 
 Next to Fix:
-[Viewing Question List]
+[Tag Filtering Feature]

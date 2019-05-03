@@ -107,7 +107,6 @@ router.post('/register', async (req, res) => {
   const { name, password } = req.body;
   try {
     const user = await user_exists(name);
-    console.log(user)
     if(!user.success){
       const hash = await bcrypt.hash(password, saltRounds);
       const user_add = await knex('users').insert({ name, password: hash }, '*');

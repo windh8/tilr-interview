@@ -6,7 +6,6 @@ const express = require('express');
 // user (JsonWebToken)
 const auth = (req, res, next) => {
   const token = req.body.token;
-  console.log(token);
   if(!token) {
     res.json({ error: 'Unauthorized Access: Client Not Logged In!'});
   }
@@ -16,7 +15,6 @@ const auth = (req, res, next) => {
       if(err) {
         res.json({ error: 'Unauthorized Access: Invalid Token!'});
       }
-      console.log(decoded);
       req.user = decoded.user;
       next();
     })
