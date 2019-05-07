@@ -6,6 +6,8 @@ Traced out Authentication:
   - In Reducer jwt
   - Ensured that correct values and logic were returned.
 
+
+
 [View Question List and Tag List: 05/02/2019 @ 9:11 PM]
 Traced out Question/Tag Lists:
   - In Component QuestionList
@@ -15,10 +17,22 @@ Traced out Question/Tag Lists:
   - Ensured that correct values and logic were returned
     to QuestionList state ({ questions, tags})
 
+
+
 [View Question List and Tag List: 05/03/2019 @ 4:00 PM]
 Debugged Question Filtering On Tags:
   - Debugging of question filtering (based on tags) now finished
   - Question Filtering now works
 
-Next to Fix:
-[Turn some routes into GET Routes]
+
+
+[Several Api Routes changed: 05/06/2019 @ 8:07 PM]
+Changed the following routes back to Get routes:
+  - /questions : fetches all questions stored on back-end
+  - /questions/specific : fetches specific questions stored on back-end
+
+Changed the auth Middle-ware function to read tokens from the Request Header
+instead of the Request Body, for allowing logged in users to reach protected routes.
+
+Changed Several Front-End Action Creator's axios requests to incorporate
+the Json-Web-Token as a Header in the Request to the Back End API.

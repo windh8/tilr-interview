@@ -5,7 +5,11 @@ import actionTypes from './actionTypes'
 export const fetchQuestions = (jwt) => async (dispatch) => {
   try {
     const {token} = jwt;
-    const { data } = await axios.post('/questions', {token})
+    const { data } = await axios.get('/questions', {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    });
     dispatch({ type: actionTypes.QUESTIONS_FETCH_ALL, payload: data.reverse() })
   } catch (err) {
     console.log(err)
@@ -15,7 +19,11 @@ export const fetchQuestions = (jwt) => async (dispatch) => {
 export const createQuestion = (text, tag, jwt) => async (dispatch) => {
   try {
     const {token} = jwt;
-    const { data } = await axios.post('/questions/new', { text, tag, token })
+    const { data } = await axios.post('/questions', { text, tag, token }, {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    });
     dispatch({ type: actionTypes.QUESTIONS_CREATE, payload: data })
     dispatch(push('/home'))
   } catch (err) {
@@ -26,7 +34,11 @@ export const createQuestion = (text, tag, jwt) => async (dispatch) => {
 export const fetchSpecificQuestions = (tag, jwt) => async (dispatch) => {
   try {
     const {token} = jwt;
-    const {data} = await axios.post(`/questions/specific?tag=${tag}`, {token})
+    const { data } = await axios.get(`/questions/specific?tag=${tag}`, {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    });
     dispatch({ type: actionTypes.QUESTIONS_FETCH_SPECIFIC, payload: data.reverse() });
   } catch (err) {
     console.log(err);

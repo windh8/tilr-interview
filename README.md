@@ -1,3 +1,13 @@
+# New Features Added [May 06, 2019]
+  - Allow Users to Register Accounts
+  - Allow Users to Log In to Application
+  - Allow, Logged In, Users to Filter Questions Which are Shown on Home Page
+  - Allow Users to See Log In Errors if Entering Account Details that are:
+    - Wrong
+    - Non-Existent
+
+  These Updates are Error Free as of Posting Date
+
 # tilr-interview
 
 This is the interview test for the full-stack JavaScript developer position at Tilr.

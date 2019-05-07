@@ -1,6 +1,6 @@
 {
   "name": "api",
-  "version": "3.0.2",
+  "version": "5.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "db:seed": "knex seed:run",
     "db:refresh": "npm run db:rollback:all && npm run db:migrate && npm run db:seed",
     "dev": "nodemon --inspect ./server.js localhost 8000",
-    "predev":"node preSetup.js",
+    "predev": "node preSetup.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

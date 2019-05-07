@@ -12,7 +12,7 @@ const router = express.Router()
 const saltRounds = 10;
 
 // For getting all questions
-router.post('/questions', auth, async function(req, res) {
+router.get('/questions', auth, async function(req, res) {
   try {
     const questions = await knex.select().table('questions')
     res.json(questions)
@@ -21,17 +21,17 @@ router.post('/questions', auth, async function(req, res) {
   }
 });
 
-router.post('/answers', auth, async function(req, res) {
+/*router.get('/answers', auth, async function(req, res) {
   try {
     const answers = await knex.select().table('answers')
     res.json(questions)
   } catch (err) {
     res.status(500)
   }
-});
+});*/
 
 // For adding more questions
-router.post('/questions/new', auth, async (req, res) => {
+router.post('/questions', auth, async (req, res) => {
   const { text, tag } = req.body
   try {
     const question = await knex('questions').insert({ text, tag }, '*')
@@ -42,7 +42,7 @@ router.post('/questions/new', auth, async (req, res) => {
 })
 
 // For querying specific questions based on tags
-router.post('/questions/specific', auth, async (req, res) => {
+router.get('/questions/specific', auth, async (req, res) => {
   const { tag } = req.query;
   try {
     const questions = await knex('questions').where('tag', tag).table('questions')
