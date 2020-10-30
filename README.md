@@ -60,3 +60,6 @@ If you'd like to add [Bookshelf](https://bookshelfjs.org/) or [Objection](https:
 
 Make a Pull Request into the master branch of this repo when you're done.
 Please include a list of changes/features you've added (a txt file is fine).
+
+## Notes:
+This repo was a coding scenario (Test) from a Company.
